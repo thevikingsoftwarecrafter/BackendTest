@@ -9,6 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{15F4DE11-885
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendTest.Api", "src\BackendTest.Api\BackendTest.Api.csproj", "{EEE9F654-792E-49BD-8DA7-ED105CE08D1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendTest.Infrastructure.CrossCutting", "src\BackendTest.Infrastructure.CrossCutting\BackendTest.Infrastructure.CrossCutting.csproj", "{4FA38244-5E96-4F71-A3F2-E9403C971974}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{7A063849-B829-42F4-82C5-B1C0D5F5C515}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,10 @@ Global
 		{EEE9F654-792E-49BD-8DA7-ED105CE08D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE9F654-792E-49BD-8DA7-ED105CE08D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE9F654-792E-49BD-8DA7-ED105CE08D1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FA38244-5E96-4F71-A3F2-E9403C971974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FA38244-5E96-4F71-A3F2-E9403C971974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FA38244-5E96-4F71-A3F2-E9403C971974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FA38244-5E96-4F71-A3F2-E9403C971974}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7E87F26E-11E3-4CEA-B3FB-88C5FBCAAAD8} = {15F4DE11-8851-4F66-9CDA-41D3B13A705F}
 		{EEE9F654-792E-49BD-8DA7-ED105CE08D1C} = {15F4DE11-8851-4F66-9CDA-41D3B13A705F}
+		{4FA38244-5E96-4F71-A3F2-E9403C971974} = {7A063849-B829-42F4-82C5-B1C0D5F5C515}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8BE3631-8A54-4730-A901-CE48D92C794C}

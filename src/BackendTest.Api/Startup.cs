@@ -36,7 +36,7 @@ namespace BackendTest.Api
                 }
                 else
                 {
-                    host.UseExceptionHandler("/Home/Error");
+                    host.UseExceptionHandler("/home/error");
                 }
 
                 host.UseStaticFiles();

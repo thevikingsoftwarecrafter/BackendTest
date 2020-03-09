@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Linq;
 using BackendTest.Infrastructure.CrossCutting.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -14,6 +18,7 @@ namespace BackendTest.Api.Config
     {
         public static IServiceCollection ConfigureServices(IServiceCollection services, IWebHostEnvironment environment)
         {
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();
             services.AddVersioning();
             services.AddSwagger();
@@ -71,6 +76,8 @@ namespace BackendTest.Api.Config
 
                     // integrate xml comments -> do we need to do this? I don't think so.
                     // options.IncludeXmlComments(XmlCommentsFilePath);
+
+                    options.EnableAnnotations();
                 });
         }
     }

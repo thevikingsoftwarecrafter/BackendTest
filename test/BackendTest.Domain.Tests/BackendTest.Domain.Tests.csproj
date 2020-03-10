@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BackendTest.Api\BackendTest.Api.csproj" />
-    <ProjectReference Include="..\..\src\BackendTest.Infrastructure.Data\BackendTest.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\..\src\BackendTest.Domain\BackendTest.Domain.csproj" />
   </ItemGroup>
 
 </Project>

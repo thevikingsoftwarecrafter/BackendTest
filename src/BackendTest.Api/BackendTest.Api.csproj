@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BackendTest.Domain\BackendTest.Domain.csproj" />
     <ProjectReference Include="..\BackendTest.Infrastructure.CrossCutting\BackendTest.Infrastructure.CrossCutting.csproj" />
+    <ProjectReference Include="..\BackendTest.Infrastructure.Data\BackendTest.Infrastructure.Data.csproj" />
   </ItemGroup>
 
 

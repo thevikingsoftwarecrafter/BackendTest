@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using BackendTest.Api.V1.Models.Pagination;
 using BackendTest.Api.V1.Models.Recomendations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ namespace BackendTest.Api.V1.Controllers.Managers
     {
         [HttpGet("upcoming")]
         [SwaggerOperation(Summary = "Gets Upcoming Movies", Tags = new[] { "Managers" })]
-        [ProducesResponseType(typeof(IEnumerable<MovieRecomendationResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedList<MovieRecomendationResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllTime([FromQuery, BindRequired] int periodOfTimeInDays, [FromQuery, BindRequired] string ageRate, [FromQuery] List<string> genres)
+        public async Task<IActionResult> GetAllTime([FromQuery, BindRequired] int periodOfTimeInDays, [FromQuery, BindRequired] string ageRate, [FromQuery] List<string> genres, [FromQuery] PageParameters pageParameters)
         {
             return NotFound("Under construction...");
         }

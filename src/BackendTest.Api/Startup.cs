@@ -22,7 +22,7 @@ namespace BackendTest.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            BackendTestApiConfiguration.ConfigureServices(services, Environment);
+            BackendTestApiConfiguration.ConfigureServices(services, Environment, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

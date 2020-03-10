@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Linq;
+using AspNetCoreRateLimit;
 using BackendTest.Infrastructure.CrossCutting.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -16,8 +19,9 @@ namespace BackendTest.Api.Config
 {
     public static class BackendTestApiConfiguration
     {
-        public static IServiceCollection ConfigureServices(IServiceCollection services, IWebHostEnvironment environment)
+        public static IServiceCollection ConfigureServices(IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
         {
+            services.AddIpRateLimiting(configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();
             services.AddVersioning();
@@ -30,6 +34,7 @@ namespace BackendTest.Api.Config
         public static void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, Func<IApplicationBuilder, IApplicationBuilder> configureHost)
         {
             configureHost(app);
+            app.UseIpRateLimiting();
             app.UseRouting();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             app.UseSwagger();
@@ -79,6 +84,30 @@ namespace BackendTest.Api.Config
 
                     options.EnableAnnotations();
                 });
+        }
+        
+        private static void AddIpRateLimiting(this IServiceCollection services, IConfiguration configuration)
+        {
+            // needed to load configuration from appsettings.json
+            services.AddOptions();
+
+            // needed to store rate limit counters and ip rules
+            services.AddMemoryCache();
+
+            //load general configuration from appsettings.json
+            services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
+
+            // inject counter and rules stores
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+
+            // https://github.com/aspnet/Hosting/issues/793
+            // the IHttpContextAccessor service is not registered by default.
+            // the clientId/clientIp resolvers use it.
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // configuration (resolvers, counter key builders)
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
         }
     }
 }

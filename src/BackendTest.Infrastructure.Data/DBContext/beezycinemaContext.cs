@@ -68,9 +68,13 @@ namespace BackendTest.Infrastructure.Data.DBContext
 
             modelBuilder.Entity<Genre>(entity =>
             {
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(255);
+                entity.HasKey(s => s.Id);
+
+                entity.OwnsOne(s => s.Name, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("Name")
+                        .IsRequired()
+                        .HasMaxLength(255));
             });
 
             modelBuilder.Entity<Movie>(entity =>
@@ -108,19 +112,30 @@ namespace BackendTest.Infrastructure.Data.DBContext
 
             modelBuilder.Entity<Session>(entity =>
             {
-                entity.Property(e => e.EndTime).HasColumnType("datetime");
+                entity.HasKey(s => s.Id);
 
-                entity.Property(e => e.StartTime).HasColumnType("datetime");
+                entity.OwnsOne(s => s.EndTime, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("EndTime")
+                        .HasColumnType("datetime"));
+
+                entity.OwnsOne(s => s.StartTime, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("StartTime")
+                        .HasColumnType("datetime"));
+
+                entity.OwnsOne(s => s.SeatsSold, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("SeatsSold")
+                        .IsRequired());
 
                 entity.HasOne(d => d.Movie)
                     .WithMany(p => p.Session)
-                    .HasForeignKey(d => d.MovieId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Session_Movie");
 
                 entity.HasOne(d => d.Room)
                     .WithMany(p => p.Session)
-                    .HasForeignKey(d => d.RoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Session_Room");
             });

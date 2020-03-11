@@ -37,6 +37,13 @@ namespace BackendTest.Api.V1.Controllers
 
             var testCity = await _context.City.Include(c => c.Cinema).ToListAsync();
 
+            var testGenre = await _context.Genre.ToListAsync();
+
+            var testSessions = await _context.Session
+                .Include(s => s.Movie)
+                .Include(s => s.Room)
+                .ToListAsync();
+
             return NotFound("Under construction...");
         }
     }

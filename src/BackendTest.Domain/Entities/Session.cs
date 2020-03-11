@@ -17,7 +17,7 @@ namespace BackendTest.Domain.Entities
 
         }
 
-        public Session(StartTime starTime, EndTime endTime, SeatsSold seatsSold, Movie movie, Room room)
+        public Session(StartTime starTime, EndTime endTime, SeatsSold seatsSold, Movie movie, Room room) : base(Guid.NewGuid().GetHashCode())
         {
             StartTime = starTime;
             EndTime = endTime;

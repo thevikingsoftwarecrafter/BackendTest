@@ -35,6 +35,8 @@ namespace BackendTest.Api.V1.Controllers
 
             var testrooms = await _context.Room.Include(r => r.Cinema).ToListAsync();
 
+            var testCity = await _context.City.Include(c => c.Cinema).ToListAsync();
+
             return NotFound("Under construction...");
         }
     }

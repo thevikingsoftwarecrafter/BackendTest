@@ -43,13 +43,27 @@ namespace BackendTest.Infrastructure.Data.DBContext
                     //.HasForeignKey(d => d.CityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cinema_City");
+
+                entity.HasMany(d => d.Room)
+                    .WithOne(p => p.Cinema);
             });
 
             modelBuilder.Entity<City>(entity =>
             {
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(255);
+                entity.HasKey(s => s.Id);
+                entity.OwnsOne(s => s.Name, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("Name")
+                        .IsRequired()
+                        .HasMaxLength(255));
+
+                entity.OwnsOne(s => s.Population, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("Population")
+                        .IsRequired());
+
+                entity.HasMany(d => d.Cinema)
+                    .WithOne(p => p.City);
             });
 
             modelBuilder.Entity<Genre>(entity =>

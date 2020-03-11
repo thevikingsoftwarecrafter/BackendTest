@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BackendTest.Domain.Entities;
+using BackendTest.Domain.ValueObjects;
 
 namespace BackendTest.Infrastructure.Data.DBContext
 {
-    public partial class City
-    {
-        public City()
+    public class City : Entity<int>
+    { 
+        public Name Name { get; private set; }
+        public Population Population { get; private set; }
+
+        private readonly List<Cinema> _cinema = new List<Cinema>();
+        public virtual IReadOnlyList<Cinema> Cinema => _cinema.ToList();
+
+        private City()
         {
-            Cinema = new HashSet<Cinema>();
+
         }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Population { get; set; }
-
-        public virtual ICollection<Cinema> Cinema { get; set; }
+        public City(Name name, Population population) : base(Guid.NewGuid().GetHashCode())
+        {
+            Name = name;
+            Population = population;
+        }
     }
 }

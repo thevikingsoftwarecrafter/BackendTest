@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BackendTest.Infrastructure.Data.DBContext
+namespace BackendTest.Domain.Entities
 {
     public partial class Movie
     {

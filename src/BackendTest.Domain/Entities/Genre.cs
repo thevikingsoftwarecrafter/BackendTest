@@ -1,11 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
+using BackendTest.Domain.ValueObjects;
 
-namespace BackendTest.Infrastructure.Data.DBContext
+namespace BackendTest.Domain.Entities
 {
-    public partial class Genre
+    public class Genre : Entity<int>
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public Name Name { get; private set; }
+
+        private Genre()
+        {
+
+        }
+
+        public Genre(Name name) : base(Guid.NewGuid().GetHashCode())
+        {
+            Name = name;
+        }
     }
 }

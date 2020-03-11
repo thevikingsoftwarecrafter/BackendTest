@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using BackendTest.Domain.Entities;
+﻿using System.Collections.Generic;
 
-namespace BackendTest.Infrastructure.Data.DBContext
+namespace BackendTest.Domain.Entities
 {
     public partial class Room
     {

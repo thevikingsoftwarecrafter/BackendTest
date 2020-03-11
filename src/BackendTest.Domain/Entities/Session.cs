@@ -1,18 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
+using BackendTest.Domain.ValueObjects;
 
-namespace BackendTest.Infrastructure.Data.DBContext
+namespace BackendTest.Domain.Entities
 {
-    public partial class Session
+    public partial class Session : Entity<int>
     {
-        public int Id { get; set; }
-        public int RoomId { get; set; }
-        public int MovieId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public int? SeatsSold { get; set; }
+        public StartTime StartTime { get; private set; }
+        public EndTime EndTime { get; private set; }
+        public SeatsSold SeatsSold { get; set; }
 
-        public virtual Movie Movie { get; set; }
-        public virtual Room Room { get; set; }
+        public virtual Movie Movie { get; private set; }
+        public virtual Room Room { get; private set; }
+
+        private Session()
+        {
+
+        }
+
+        public Session(StartTime starTime, EndTime endTime, SeatsSold seatsSold, Movie movie, Room room)
+        {
+            StartTime = starTime;
+            EndTime = endTime;
+            SeatsSold = seatsSold;
+            Movie = movie;
+            Room = room;
+        }
     }
 }

@@ -6,17 +6,18 @@ using Xunit;
 
 namespace BackendTest.Domain.Tests.ValueObjects
 {
-    public class PopulationShould
+    public class StartTimeShould
     {
-        [Theory]
-        [InlineData(-10)]
-        [InlineData(0)]
-        public void Fails_When_Population_Is_Zero_Or_Negative(int population)
+        [Fact]
+        public void Fails_When_StartTime_Is_Default_DateTime()
         {
-            //Arrange & Act
+            //Arrange
+            DateTime startTime = default;
+            
+            //Act
             Action action = () =>
             {
-                var sut = new Population(population);
+                var sut = new StartTime(startTime);
             };
 
             //Assert
@@ -24,13 +25,13 @@ namespace BackendTest.Domain.Tests.ValueObjects
         }
 
         [Theory, AutoData]
-        public void Creates_When_Population_Is_Valid_Value(int population)
+        public void Creates_When_StartTime_Is_Valid_Value(DateTime startTime)
         {
             //Arrange & Act
-            var sut = new Population(population);
+            var sut = new StartTime(startTime);
 
             //Assert
-            sut.Value.Should().Be(population);
+            sut.Value.Should().Be(startTime);
         }
     }
 }

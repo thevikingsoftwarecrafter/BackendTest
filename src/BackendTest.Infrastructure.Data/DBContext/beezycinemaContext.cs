@@ -1,4 +1,5 @@
 ﻿using BackendTest.Domain.Entities;
+using BackendTest.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendTest.Infrastructure.Data.DBContext
@@ -40,7 +41,6 @@ namespace BackendTest.Infrastructure.Data.DBContext
 
                 entity.HasOne(d => d.City)
                     .WithMany(p => p.Cinema)
-                    //.HasForeignKey(d => d.CityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cinema_City");
 
@@ -79,13 +79,30 @@ namespace BackendTest.Infrastructure.Data.DBContext
 
             modelBuilder.Entity<Movie>(entity =>
             {
-                entity.Property(e => e.OriginalLanguage).HasMaxLength(255);
+                entity.HasKey(s => s.Id);
 
-                entity.Property(e => e.OriginalTitle)
-                    .IsRequired()
-                    .HasMaxLength(512);
+                entity.OwnsOne(s => s.OriginalLanguage, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("OriginalLanguage")
+                        .HasMaxLength(255));
 
-                entity.Property(e => e.ReleaseDate).HasColumnType("datetime");
+                entity.OwnsOne(s => s.OriginalTitle, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("OriginalTitle")
+                        .IsRequired()
+                        .HasMaxLength(512));
+
+                entity.OwnsOne(s => s.ReleaseDate, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("ReleaseDate")
+                        .HasColumnType("datetime"));
+
+                entity.OwnsOne(s => s.Adult, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("Adult"));
+
+                entity.HasMany(d => d.Session)
+                    .WithOne(p => p.Movie);
             });
 
             modelBuilder.Entity<MovieGenre>(entity =>

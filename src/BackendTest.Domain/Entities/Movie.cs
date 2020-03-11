@@ -1,21 +1,36 @@
-﻿using System;
+﻿using BackendTest.Domain.ValueObjects;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BackendTest.Domain.Entities
 {
-    public partial class Movie
+    public class Movie : Entity<int>
     {
-        public Movie()
+        public OriginalTitle OriginalTitle { get; private set; }
+
+        public ReleaseDate ReleaseDate { get; private set; }
+
+        public OriginalLanguage OriginalLanguage { get; private set; }
+
+        public Adult Adult { get; private set; }
+
+        private readonly List<Session> _session = new List<Session>();
+
+        public virtual IReadOnlyList<Session> Session => _session.ToList();
+
+        private Movie()
         {
-            Session = new HashSet<Session>();
+
         }
 
-        public int Id { get; set; }
-        public string OriginalTitle { get; set; }
-        public DateTime ReleaseDate { get; set; }
-        public string OriginalLanguage { get; set; }
-        public bool Adult { get; set; }
-
-        public virtual ICollection<Session> Session { get; set; }
+        public Movie(OriginalTitle originalTitle, ReleaseDate releaseDate, OriginalLanguage originalLanguage, Adult adult, List<Session> session) : base(Guid.NewGuid().GetHashCode())
+        {
+            OriginalTitle = originalTitle;
+            ReleaseDate = releaseDate;
+            OriginalLanguage = originalLanguage;
+            Adult = adult;
+            _session = session;
+        }
     }
 }

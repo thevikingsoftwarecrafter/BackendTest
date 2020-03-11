@@ -1,4 +1,4 @@
-﻿namespace BackendTest.Domain.Entities
+﻿namespace BackendTest.Infrastructure.Data.Models
 {
     public partial class MovieGenre
     {

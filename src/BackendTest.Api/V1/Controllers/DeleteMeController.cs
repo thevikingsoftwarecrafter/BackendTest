@@ -28,12 +28,12 @@ namespace BackendTest.Api.V1.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
-            var test = await _context.Cinema
+            var testCinemas = await _context.Cinema
                 .Include(c => c.City)
                 .Include(c => c.Room)
                 .ToListAsync();
 
-            var testrooms = await _context.Room.Include(r => r.Cinema).ToListAsync();
+            var testRooms = await _context.Room.Include(r => r.Cinema).ToListAsync();
 
             var testCity = await _context.City.Include(c => c.Cinema).ToListAsync();
 
@@ -43,6 +43,8 @@ namespace BackendTest.Api.V1.Controllers
                 .Include(s => s.Movie)
                 .Include(s => s.Room)
                 .ToListAsync();
+
+            var testMovies = await _context.Movie.Include(m => m.Session).ToListAsync();
 
             return NotFound("Under construction...");
         }

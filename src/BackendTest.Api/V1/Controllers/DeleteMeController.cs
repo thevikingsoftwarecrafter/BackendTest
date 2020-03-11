@@ -33,7 +33,7 @@ namespace BackendTest.Api.V1.Controllers
                 .Include(c => c.Room)
                 .ToListAsync();
 
-            var testRooms = await _context.Room.Include(r => r.Cinema).ToListAsync();
+            var testRooms = await _context.Room.Include(r => r.Cinema).Include(r => r.Session).ToListAsync();
 
             var testCity = await _context.City.Include(c => c.Cinema).ToListAsync();
 

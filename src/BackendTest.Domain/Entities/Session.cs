@@ -3,7 +3,7 @@ using BackendTest.Domain.ValueObjects;
 
 namespace BackendTest.Domain.Entities
 {
-    public partial class Session : Entity<int>
+    public class Session : Entity<int>
     {
         public StartTime StartTime { get; private set; }
         public EndTime EndTime { get; private set; }

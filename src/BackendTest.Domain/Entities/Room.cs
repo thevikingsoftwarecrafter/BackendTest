@@ -1,21 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using BackendTest.Domain.ValueObjects;
 
 namespace BackendTest.Domain.Entities
 {
-    public partial class Room
+    public class Room : Entity<int>
     {
-        public Room()
+        public Name Name { get; private set; }
+
+        public Size Size { get; private set; }
+
+        public Seats Seats { get; private set; }
+
+        public virtual Cinema Cinema { get; private set; }
+
+        private readonly List<Session> _session = new List<Session>();
+
+        public virtual ICollection<Session> Session => _session.ToList();
+
+        private Room()
         {
-            Session = new HashSet<Session>();
+
         }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Size { get; set; }
-        public int Seats { get; set; }
-        public int CinemaId { get; set; }
-
-        public virtual Cinema Cinema { get; set; }
-        public virtual ICollection<Session> Session { get; set; }
+        public Room(Name name, Size size, Seats seats, Cinema cinema, List<Session> session) : base(Guid.NewGuid().GetHashCode())
+        {
+            Name = name;
+            Size = size;
+            Seats = seats;
+            Cinema = cinema;
+            _session = session;
+        }
     }
 }

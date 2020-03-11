@@ -112,17 +112,26 @@ namespace BackendTest.Infrastructure.Data.DBContext
 
             modelBuilder.Entity<Room>(entity =>
             {
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(255);
+                entity.HasKey(s => s.Id);
 
-                entity.Property(e => e.Size)
-                    .IsRequired()
-                    .HasMaxLength(255);
+                entity.OwnsOne(s => s.Name, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("Name")
+                        .IsRequired()
+                        .HasMaxLength(255));
+
+                entity.OwnsOne(s => s.Size, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("Size")
+                        .IsRequired()
+                        .HasMaxLength(255));
+
+                entity.OwnsOne(s => s.Seats, n =>
+                    n.Property(p => p.Value)
+                        .HasColumnName("Seats"));
 
                 entity.HasOne(d => d.Cinema)
                     .WithMany(p => p.Room)
-                    .HasForeignKey(d => d.CinemaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Room_Cinema");
             });

@@ -6,18 +6,18 @@ using Xunit;
 
 namespace BackendTest.Domain.Tests.ValueObjects
 {
-    public class CinemaOpenDateShould
+    public class OpenDateShould
     {
         [Fact]
         public void Fails_When_CinemaOpenDate_Is_Default_DateTime()
         {
             //Arrange
-            DateTime cinemaOpenDate = default;
+            DateTime openDate = default;
             
             //Act
             Action action = () =>
             {
-                var sut = new CinemaOpenDate(cinemaOpenDate);
+                var sut = new OpenDate(openDate);
             };
 
             //Assert
@@ -25,13 +25,13 @@ namespace BackendTest.Domain.Tests.ValueObjects
         }
 
         [Theory, AutoData]
-        public void Creates_When_CinemaOpenDate_Is_Valid_Value(DateTime cinemaOpenDate)
+        public void Creates_When_CinemaOpenDate_Is_Valid_Value(DateTime openDate)
         {
             //Arrange & Act
-            var sut = new CinemaOpenDate(cinemaOpenDate);
+            var sut = new OpenDate(openDate);
 
             //Assert
-            sut.Value.Should().Be(cinemaOpenDate);
+            sut.Value.Should().Be(openDate);
         }
     }
 }

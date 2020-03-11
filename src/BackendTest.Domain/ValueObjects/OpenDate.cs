@@ -9,7 +9,7 @@ namespace BackendTest.Domain.ValueObjects
         public OpenDate(DateTime date)
         {
             if (date == default)
-                throw new ArgumentException("Cinema Open Date must have a valid date");
+                throw new ArgumentException("Open Date must have a valid date");
             Value = date;
         }
 

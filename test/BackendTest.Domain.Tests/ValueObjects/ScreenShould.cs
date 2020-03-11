@@ -6,18 +6,17 @@ using Xunit;
 
 namespace BackendTest.Domain.Tests.ValueObjects
 {
-    public class OpenDateShould
+    public class ScreenShould
     {
-        [Fact]
-        public void Fails_When_OpenDate_Is_Default_DateTime()
+        [Theory]
+        [InlineData(-10)]
+        [InlineData(0)]
+        public void Fails_When_Screen_Is_Zero_Or_Negative(int screen)
         {
-            //Arrange
-            DateTime openDate = default;
-            
-            //Act
+            //Arrange & Act
             Action action = () =>
             {
-                var sut = new OpenDate(openDate);
+                var sut = new Screen(screen);
             };
 
             //Assert
@@ -25,13 +24,13 @@ namespace BackendTest.Domain.Tests.ValueObjects
         }
 
         [Theory, AutoData]
-        public void Creates_When_OpenDate_Is_Valid_Value(DateTime openDate)
+        public void Creates_When_Screen_Is_Valid_Value(int screen)
         {
             //Arrange & Act
-            var sut = new OpenDate(openDate);
+            var sut = new Screen(screen);
 
             //Assert
-            sut.Value.Should().Be(openDate);
+            sut.Value.Should().Be(screen);
         }
     }
 }

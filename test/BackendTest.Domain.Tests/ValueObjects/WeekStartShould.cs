@@ -6,18 +6,18 @@ using Xunit;
 
 namespace BackendTest.Domain.Tests.ValueObjects
 {
-    public class OpenDateShould
+    public class WeekStartShould
     {
         [Fact]
-        public void Fails_When_OpenDate_Is_Default_DateTime()
+        public void Fails_When_WeekStart_Is_Default_DateTime()
         {
             //Arrange
-            DateTime openDate = default;
+            DateTime weekStart = default;
             
             //Act
             Action action = () =>
             {
-                var sut = new OpenDate(openDate);
+                var sut = new WeekStart(weekStart);
             };
 
             //Assert
@@ -25,13 +25,13 @@ namespace BackendTest.Domain.Tests.ValueObjects
         }
 
         [Theory, AutoData]
-        public void Creates_When_OpenDate_Is_Valid_Value(DateTime openDate)
+        public void Creates_When_WeekStart_Is_Valid_Value(DateTime weekStart)
         {
             //Arrange & Act
-            var sut = new OpenDate(openDate);
+            var sut = new WeekStart(weekStart);
 
             //Assert
-            sut.Value.Should().Be(openDate);
+            sut.Value.Should().Be(weekStart);
         }
     }
 }

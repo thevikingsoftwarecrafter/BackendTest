@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BackendTest.Domain.Entities;
 
 namespace BackendTest.Infrastructure.Data.DBContext
 {

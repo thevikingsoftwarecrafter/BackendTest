@@ -7,6 +7,10 @@ namespace BackendTest.Domain.Entities
     {
         public T Id { get; }
 
+        protected Entity()
+        {
+        }
+
         protected Entity(T id)
         {
             Id = id;

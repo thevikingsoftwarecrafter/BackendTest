@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Linq;
 using AspNetCoreRateLimit;
 using BackendTest.Infrastructure.CrossCutting.Swagger;
+using BackendTest.Infrastructure.Data.DBContext;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -26,6 +23,7 @@ namespace BackendTest.Api.Config
             services.AddControllers();
             services.AddVersioning();
             services.AddSwagger();
+            services.AddDbContext<beezycinemaContext>(options => options.UseSqlServer(configuration.GetConnectionString("beezycinema"), m => m.MigrationsAssembly("BackendTest.Infrastructure.Data")));
 
             return services;
         }

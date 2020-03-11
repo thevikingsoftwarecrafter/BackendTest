@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BackendTest.Api.V1.Models.BillBoards;
 using BackendTest.Api.V1.Models.Pagination;
 using Microsoft.AspNetCore.Http;

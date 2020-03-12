@@ -1,4 +1,5 @@
 using BackendTest.Api.Config;
+using BackendTest.Infrastructure.CrossCutting.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -40,6 +41,7 @@ namespace BackendTest.Api
                 }
 
                 host.UseStaticFiles();
+                host.UseMiddleware<LogContextMiddleware>(); // This should go in this order
 
                 return host;
             });

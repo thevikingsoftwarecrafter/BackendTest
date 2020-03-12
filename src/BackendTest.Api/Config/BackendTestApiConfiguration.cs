@@ -20,8 +20,12 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
+using Serilog.Events;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace BackendTest.Api.Config
@@ -33,6 +37,7 @@ namespace BackendTest.Api.Config
             services.AddIpRateLimiting(configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();
+            services.LoggerConfigure();
             services.AddMediatR(typeof(GetIntelligentBillboardHandler).GetTypeInfo().Assembly);
             services.AddRepositories();
             services.AddVersioning();
@@ -133,6 +138,7 @@ namespace BackendTest.Api.Config
 
         public static void AddPipelineBehaviors(this IServiceCollection services)
         {
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorPipelineBehavior<,>));
             services.Scan(scan => scan
                 .FromAssembliesOf(typeof(GetIntelligentBillboardHandler))
@@ -154,6 +160,26 @@ namespace BackendTest.Api.Config
             // Because exceptions are handled polymorphically, this will act as a "catch all" mapping, which is why it's added last.
             // If an exception other than NotImplementedException and HttpRequestException is thrown, this will handle it.
             options.Map<Exception>(ex => new ExceptionProblemDetails(ex, StatusCodes.Status500InternalServerError));
+        }
+
+        public static void LoggerConfigure(this IServiceCollection services)
+        {
+            var logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("Team", "The Viking Software Crafter")
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
+                .MinimumLevel.Override("System", LogEventLevel.Error)
+                .WriteTo.File(
+                    outputTemplate: "{NewLine}{Timestamp:HH:mm:ss} [{Level:u3}] ({SourceContext}): {Message} {Exception}",
+                    path: @".\\logs\\.log",
+                    rollOnFileSizeLimit: true,
+                    rollingInterval: RollingInterval.Day,
+                    shared: true)
+                .CreateLogger();
+
+            services.RemoveAll<ILoggerProvider>();
+            services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(logger: logger, dispose: true));
         }
     }
 }

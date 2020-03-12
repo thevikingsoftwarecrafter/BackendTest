@@ -42,7 +42,7 @@ namespace BackendTest.Domain.Queries.IntelligentBillboard
         private IEnumerable<BillboardLine> ObtainBillboard()
         {
             var weekStartDateTime = _dateTimeService.Now();
-            var remainingDays = _request.PeriodOfTimeInDays;
+            int remainingDays = _request.PeriodOfTimeInDays;
             const int weekLength = 7;
             do
             {
@@ -52,7 +52,7 @@ namespace BackendTest.Domain.Queries.IntelligentBillboard
                     null);
                 remainingDays -= weekLength;
                 weekStartDateTime = weekStartDateTime.AddDays(weekLength);
-            } while (remainingDays >= 0);
+            } while (remainingDays > 0);
         }
     }
 }

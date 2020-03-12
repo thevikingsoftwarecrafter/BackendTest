@@ -28,6 +28,8 @@ namespace BackendTest.Domain.Tests.Queries.IntelligentBillboard
 
         [Theory]
         [InlineData(10, 2)]
+        [InlineData(20, 3)]
+        [InlineData(70, 10)]
         public async Task Make_A_Billboard_With_Many_Weeks_As_Needed(int periodOfTimeInDays, int weeksExpected)
         {
             //Arrange

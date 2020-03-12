@@ -1,7 +1,11 @@
 ﻿using System;
 using AspNetCoreRateLimit;
+using BackendTest.Api.V1.Behaviors;
+using BackendTest.Domain.Queries.IntelligentBillboard;
 using BackendTest.Infrastructure.CrossCutting.Swagger;
 using BackendTest.Infrastructure.Data.DBContext;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +27,7 @@ namespace BackendTest.Api.Config
             services.AddControllers();
             services.AddVersioning();
             services.AddSwagger();
+            services.AddPipelineBehaviors();
             services.AddDbContext<beezycinemaContext>(options => options.UseSqlServer(configuration.GetConnectionString("beezycinema"), m => m.MigrationsAssembly("BackendTest.Infrastructure.Data")));
 
             return services;
@@ -106,6 +111,11 @@ namespace BackendTest.Api.Config
 
             // configuration (resolvers, counter key builders)
             services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+        }
+
+        public static void AddPipelineBehaviors(this IServiceCollection services)
+        {
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorPipelineBehavior<,>));
         }
     }
 }

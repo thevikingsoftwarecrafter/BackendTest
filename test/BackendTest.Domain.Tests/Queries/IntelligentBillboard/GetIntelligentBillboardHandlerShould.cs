@@ -51,22 +51,31 @@ namespace BackendTest.Domain.Tests.Queries.IntelligentBillboard
         }
 
         [Fact]
-        public async Task Make_A_Billboard_With_One_BigScreen_Movie()
+        public async Task Make_A_Billboard()
         {
             //Arrange
             var handler = new GetIntelligentBillboardHandler(_repository, _dateTimeService);
 
             //Act
-            var response = await handler.Handle(new GetIntelligentBillboardRequest(7, 1, 1, true),
+            var response = await handler.Handle(new GetIntelligentBillboardRequest(10, 2, 2, true),
                 CancellationToken.None);
-            var firstScreenMovie = response.Billboard.ValueOr(() => null).First().MoviesOnBigScreen.First();
+            var (firstBigScreen, firstBigScreenMovie) = response.Billboard.ValueOr(() => null).First().MoviesOnBigScreen.First();
+            var (secondBigScreen, secondBigScreenMovie) = response.Billboard.ValueOr(() => null).First().MoviesOnBigScreen.Skip(1).First();
+            var (firstSmallScreen, firstSmallScreenMovie) = response.Billboard.ValueOr(() => null).First().MoviesOnSmallScreen.First();
+            var (firstBigScreen2NdWeek, firstBigScreenMovie2NdWeek) = response.Billboard.ValueOr(() => null).Skip(1).First().MoviesOnBigScreen.First();
 
             //Assert
-            response.Billboard.ValueOr(() => null)
-                .ToList().Should().Match(l => l.First().MoviesOnBigScreen.Count == 1);
-
-            //response.Billboard.ValueOr(new ReadOnlyCollection<BillboardLine>(new List<BillboardLine>()))
-            //    .ToList().Should().Match(l => l.First().MoviesOnBigScreen.First().);
+            response.Billboard.ValueOr(() => null).ToList().Should()
+                .Match(l => l.First().MoviesOnBigScreen.Count == 2)
+                .And.Match(l => l.First().MoviesOnSmallScreen.Count == 2);
+            firstBigScreen.Value.Should().Be(1);
+            firstBigScreenMovie.Title.Value.Should().Be("Some Title 1");
+            secondBigScreen.Value.Should().Be(2);
+            secondBigScreenMovie.Title.Value.Should().Be("Some Title 2.1");
+            firstSmallScreen.Value.Should().Be(1);
+            firstSmallScreenMovie.Title.Value.Should().Be("Some Title 4");
+            firstBigScreen2NdWeek.Value.Should().Be(1);
+            firstBigScreenMovie2NdWeek.Title.Value.Should().Be("Some Title 2");
         }
 
         private ReadOnlyCollection<QueriedMovie> FeedMoviesRepository()
@@ -74,8 +83,9 @@ namespace BackendTest.Domain.Tests.Queries.IntelligentBillboard
             return new ReadOnlyCollection<QueriedMovie>(new List<QueriedMovie>()
             {
                 new QueriedMovie(new OriginalTitle("Some Title 1"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 1, 1), "www.google.com", null, new SeatsSold(100), QueriedMovie.BigSize),
-                new QueriedMovie(new OriginalTitle("Some Title 2"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 3, 20), "www.google.com", null, new SeatsSold(80), QueriedMovie.BigSize),
-                new QueriedMovie(new OriginalTitle("Some Title 3"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 1, 1), "www.google.com", null, new SeatsSold(20), QueriedMovie.SmallSize),
+                new QueriedMovie(new OriginalTitle("Some Title 2"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 3, 17), "www.google.com", null, new SeatsSold(80), QueriedMovie.BigSize),
+                new QueriedMovie(new OriginalTitle("Some Title 2.1"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 3, 1), "www.google.com", null, new SeatsSold(70), QueriedMovie.BigSize),
+                new QueriedMovie(new OriginalTitle("Some Title 3"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 4, 1), "www.google.com", null, new SeatsSold(20), QueriedMovie.SmallSize),
                 new QueriedMovie(new OriginalTitle("Some Title 4"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 1, 1), "www.google.com", null, new SeatsSold(5), QueriedMovie.SmallSize),
             });
         }

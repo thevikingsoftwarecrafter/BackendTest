@@ -47,16 +47,35 @@ namespace BackendTest.Domain.Queries.IntelligentBillboard
             var weekStartDateTime = _dateTimeService.Now();
             int remainingDays = _request.PeriodOfTimeInDays;
             const int weekLength = 7;
+            var consumibleSmall = new ConsumibleQueriedMovies(QueriedMoviesBySize(QueriedMovie.SmallSize));
+            var consumibleBig = new ConsumibleQueriedMovies(QueriedMoviesBySize(QueriedMovie.BigSize));
             do
             {
                 yield return new BillboardLine(
                     new WeekStart(weekStartDateTime),
-                    null,
-                    null);
+                    BuildMoviesByDate(weekStartDateTime, consumibleBig).ToList(),
+                    BuildMoviesByDate(weekStartDateTime, consumibleSmall).ToList());
 
                 remainingDays -= weekLength;
                 weekStartDateTime = weekStartDateTime.AddDays(weekLength);
             } while (remainingDays > 0);
+        }
+
+        private IEnumerable<(Screen, QueriedMovie)> BuildMoviesByDate(DateTime weekStartDateTime, ConsumibleQueriedMovies consumibleQueriedMovies)
+        {
+            for (int screen = 1; screen <= _request.BigScreens; screen++)
+            {
+                yield return
+                (
+                    new Screen(screen),
+                    consumibleQueriedMovies.PopFirstValidMovieByDate(weekStartDateTime).ValueOr(() => null)
+                );
+            }
+        }
+
+        private IEnumerable<QueriedMovie> QueriedMoviesBySize(Size size)
+        {
+            return _queriedMovies.ValueOr(new ReadOnlyCollection<QueriedMovie>(new List<QueriedMovie>())).Where(m => m.Size == size);
         }
     }
 }

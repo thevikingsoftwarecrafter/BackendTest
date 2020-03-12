@@ -17,7 +17,7 @@ namespace BackendTest.Domain.Tests.Queries.IntelligentBillboard
         [InlineData(30, 0, 0, true, false)]
         [InlineData(30, 1, 0, true, true)]
         [InlineData(30, 0, 1, true, true)]
-        public void ValidateTheRequest(int periodOfTimeInDays, int bigScreens, int smallScreens, bool city, bool isValid)
+        public void Validate_The_Request(int periodOfTimeInDays, int bigScreens, int smallScreens, bool city, bool isValid)
         {
             var validator = new GetIntelligentBillboardValidator();
             var request = new GetIntelligentBillboardRequest(periodOfTimeInDays, bigScreens, smallScreens, city);

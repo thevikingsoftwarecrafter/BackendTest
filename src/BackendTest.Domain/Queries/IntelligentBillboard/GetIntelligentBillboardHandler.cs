@@ -53,6 +53,7 @@ namespace BackendTest.Domain.Queries.IntelligentBillboard
                     new WeekStart(weekStartDateTime),
                     null,
                     null);
+
                 remainingDays -= weekLength;
                 weekStartDateTime = weekStartDateTime.AddDays(weekLength);
             } while (remainingDays > 0);

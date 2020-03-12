@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BackendTest.Domain.Queries.IntelligentBillboard;
@@ -43,14 +44,39 @@ namespace BackendTest.Domain.Tests.Queries.IntelligentBillboard
                 CancellationToken.None);
 
             //Assert
-            response.Billboard.ValueOr(new ReadOnlyCollection<BillboardLine>(new List<BillboardLine>())).Should().HaveCount(weeksExpected);
+            response.Billboard.ValueOr(() => null)
+                .Should().HaveCount(weeksExpected);
+            response.Billboard.ValueOr(() => null)
+                .ToList().Should().Match(l => l.First().WeekStart == _dateTimeService.Now());
+        }
+
+        [Fact]
+        public async Task Make_A_Billboard_With_One_BigScreen_Movie()
+        {
+            //Arrange
+            var handler = new GetIntelligentBillboardHandler(_repository, _dateTimeService);
+
+            //Act
+            var response = await handler.Handle(new GetIntelligentBillboardRequest(7, 1, 1, true),
+                CancellationToken.None);
+            var firstScreenMovie = response.Billboard.ValueOr(() => null).First().MoviesOnBigScreen.First();
+
+            //Assert
+            response.Billboard.ValueOr(() => null)
+                .ToList().Should().Match(l => l.First().MoviesOnBigScreen.Count == 1);
+
+            //response.Billboard.ValueOr(new ReadOnlyCollection<BillboardLine>(new List<BillboardLine>()))
+            //    .ToList().Should().Match(l => l.First().MoviesOnBigScreen.First().);
         }
 
         private ReadOnlyCollection<QueriedMovie> FeedMoviesRepository()
         {
             return new ReadOnlyCollection<QueriedMovie>(new List<QueriedMovie>()
             {
-                new QueriedMovie(new OriginalTitle("aaa"), "", "g1", new OriginalLanguage("l1"), new DateTime(2020, 1, 1), "", null, new SeatsSold(100), QueriedMovie.BigSize)
+                new QueriedMovie(new OriginalTitle("Some Title 1"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 1, 1), "www.google.com", null, new SeatsSold(100), QueriedMovie.BigSize),
+                new QueriedMovie(new OriginalTitle("Some Title 2"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 3, 20), "www.google.com", null, new SeatsSold(80), QueriedMovie.BigSize),
+                new QueriedMovie(new OriginalTitle("Some Title 3"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 1, 1), "www.google.com", null, new SeatsSold(20), QueriedMovie.SmallSize),
+                new QueriedMovie(new OriginalTitle("Some Title 4"), "Some Overview", "Terror", new OriginalLanguage("en"), new DateTime(2020, 1, 1), "www.google.com", null, new SeatsSold(5), QueriedMovie.SmallSize),
             });
         }
     }

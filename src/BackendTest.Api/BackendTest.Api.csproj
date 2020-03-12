@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCoreRateLimit" Version="3.0.5" />
+    <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="4.4.0" />
     <PackageReference Include="MediatR" Version="8.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Reflection;
 using AspNetCoreRateLimit;
+using BackendTest.Api.Services;
 using BackendTest.Api.V1.Behaviors;
 using BackendTest.Domain.Queries.IntelligentBillboard;
+using BackendTest.Domain.Repositories;
+using BackendTest.Domain.Services;
 using BackendTest.Infrastructure.CrossCutting.Swagger;
 using BackendTest.Infrastructure.Data.DBContext;
+using BackendTest.Infrastructure.Data.Repositories;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -27,12 +31,19 @@ namespace BackendTest.Api.Config
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();
             services.AddMediatR(typeof(GetIntelligentBillboardHandler).GetTypeInfo().Assembly);
+            services.AddRepositories();
             services.AddVersioning();
             services.AddSwagger();
             services.AddPipelineBehaviors();
             services.AddDbContext<beezycinemaContext>(options => options.UseSqlServer(configuration.GetConnectionString("beezycinema"), m => m.MigrationsAssembly("BackendTest.Infrastructure.Data")));
+            services.AddSingleton<IDateTimeService, DateTimeService>();
 
             return services;
+        }
+
+        private static void AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IQueriedMoviesRepository, QueriedMoviesRepository>();
         }
 
 
@@ -118,6 +129,10 @@ namespace BackendTest.Api.Config
         public static void AddPipelineBehaviors(this IServiceCollection services)
         {
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorPipelineBehavior<,>));
+            services.Scan(scan => scan
+                .FromAssembliesOf(typeof(GetIntelligentBillboardHandler))
+                .AddClasses(@class => @class.AssignableTo(typeof(IValidator<>)))
+                .AsImplementedInterfaces());
         }
     }
 }

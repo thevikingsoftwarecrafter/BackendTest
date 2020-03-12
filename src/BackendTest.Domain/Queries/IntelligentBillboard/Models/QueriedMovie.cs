@@ -6,8 +6,8 @@ namespace BackendTest.Domain.Queries.IntelligentBillboard.Models
 {
     public class QueriedMovie
     {
-        public static readonly Size BigSize = new Size("B");
-        public static readonly Size SmallSize = new Size("S");
+        public static readonly Size BigSize = new Size("Big");
+        public static readonly Size SmallSize = new Size("Small");
 
         public OriginalTitle Title { get; }
         public string Overview { get; }

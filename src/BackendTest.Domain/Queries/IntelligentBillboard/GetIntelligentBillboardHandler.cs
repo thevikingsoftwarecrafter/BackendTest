@@ -53,17 +53,17 @@ namespace BackendTest.Domain.Queries.IntelligentBillboard
             {
                 yield return new BillboardLine(
                     new WeekStart(weekStartDateTime),
-                    BuildMoviesByDate(weekStartDateTime, consumibleBig).ToList(),
-                    BuildMoviesByDate(weekStartDateTime, consumibleSmall).ToList());
+                    BuildMoviesByDate(weekStartDateTime, consumibleBig, _request.BigScreens).ToList(),
+                    BuildMoviesByDate(weekStartDateTime, consumibleSmall, _request.SmallScreens).ToList());
 
                 remainingDays -= weekLength;
                 weekStartDateTime = weekStartDateTime.AddDays(weekLength);
             } while (remainingDays > 0);
         }
 
-        private IEnumerable<(Screen, QueriedMovie)> BuildMoviesByDate(DateTime weekStartDateTime, ConsumibleQueriedMovies consumibleQueriedMovies)
+        private IEnumerable<(Screen, QueriedMovie)> BuildMoviesByDate(DateTime weekStartDateTime, ConsumibleQueriedMovies consumibleQueriedMovies, int numberOfScreens)
         {
-            for (int screen = 1; screen <= _request.BigScreens; screen++)
+            for (int screen = 1; screen <= numberOfScreens; screen++)
             {
                 yield return
                 (

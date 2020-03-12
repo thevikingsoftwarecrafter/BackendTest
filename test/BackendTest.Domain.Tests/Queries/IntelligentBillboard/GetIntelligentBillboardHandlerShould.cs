@@ -7,6 +7,7 @@ using BackendTest.Domain.Queries.IntelligentBillboard;
 using BackendTest.Domain.Queries.IntelligentBillboard.Models;
 using BackendTest.Domain.Repositories;
 using BackendTest.Domain.Services;
+using BackendTest.Domain.ValueObjects;
 using FluentAssertions;
 using NSubstitute;
 using Optional;
@@ -22,6 +23,8 @@ namespace BackendTest.Domain.Tests.Queries.IntelligentBillboard
         public GetIntelligentBillboardHandlerShould()
         {
             _repository = Substitute.For<IQueriedMoviesRepository>();
+            _repository.GetAllMovies().Returns(FeedMoviesRepository().SomeNotNull());
+            _repository.GetAllMoviesFromCity().Returns(FeedMoviesRepository().SomeNotNull());
             _dateTimeService = Substitute.For<IDateTimeService>();
             _dateTimeService.Now().Returns(new DateTime(2020, 3, 11));
         }
@@ -41,6 +44,14 @@ namespace BackendTest.Domain.Tests.Queries.IntelligentBillboard
 
             //Assert
             response.Billboard.ValueOr(new ReadOnlyCollection<BillboardLine>(new List<BillboardLine>())).Should().HaveCount(weeksExpected);
+        }
+
+        private ReadOnlyCollection<QueriedMovie> FeedMoviesRepository()
+        {
+            return new ReadOnlyCollection<QueriedMovie>(new List<QueriedMovie>()
+            {
+                new QueriedMovie(new OriginalTitle("aaa"), "", "g1", new OriginalLanguage("l1"), new DateTime(2020, 1, 1), "", null, new SeatsSold(100), QueriedMovie.BigSize)
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace BackendTest.Domain.Queries.IntelligentBillboard
     {
         private readonly IQueriedMoviesRepository _repository;
         private readonly IDateTimeService _dateTimeService;
-        private Option<IReadOnlyList<QueriedMovie>> _queriedMovies;
+        private Option<ReadOnlyCollection<QueriedMovie>> _queriedMovies;
         private GetIntelligentBillboardRequest _request;
 
         public GetIntelligentBillboardHandler(IQueriedMoviesRepository repository, IDateTimeService dateTimeService)
@@ -30,10 +31,12 @@ namespace BackendTest.Domain.Queries.IntelligentBillboard
         {
             _request = request;
             _queriedMovies = await GetQueriedMoviesFromSource();
-            return new GetIntelligentBillboardResponse(ObtainBillboard().ToList().SomeNotNull());
+            return _queriedMovies.Match(
+                none: () => new GetIntelligentBillboardResponse(new List<BillboardLine>().SomeNotNull()),
+                some: x => new GetIntelligentBillboardResponse(ObtainBillboard().ToList().SomeNotNull()));
         }
 
-        private async Task<Option<IReadOnlyList<QueriedMovie>>> GetQueriedMoviesFromSource()
+        private async Task<Option<ReadOnlyCollection<QueriedMovie>>> GetQueriedMoviesFromSource()
         {
             if (_request.City) return await _repository.GetAllMoviesFromCity();
             return await _repository.GetAllMovies();

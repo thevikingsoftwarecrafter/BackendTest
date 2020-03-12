@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using AspNetCoreRateLimit;
 using BackendTest.Api.V1.Behaviors;
 using BackendTest.Domain.Queries.IntelligentBillboard;
@@ -25,6 +26,7 @@ namespace BackendTest.Api.Config
             services.AddIpRateLimiting(configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddControllers();
+            services.AddMediatR(typeof(GetIntelligentBillboardHandler).GetTypeInfo().Assembly);
             services.AddVersioning();
             services.AddSwagger();
             services.AddPipelineBehaviors();

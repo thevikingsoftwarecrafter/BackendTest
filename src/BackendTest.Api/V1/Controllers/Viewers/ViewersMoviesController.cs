@@ -17,7 +17,7 @@ namespace BackendTest.Api.V1.Controllers.Viewers
     public class ViewersMoviesController : ControllerBase
     {
         [HttpGet("all-time")]
-        [SwaggerOperation(Summary = "Gets All Time Movies", Tags = new[] { "Viewers" })]
+        [SwaggerOperation(Summary = "Gets All Time MoviesFromExternalApi", Tags = new[] { "Viewers" })]
         [ProducesResponseType(typeof(PagedList<MovieRecomendationResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllTime([FromQuery] List<string> keywords, [FromQuery] List<string> genres, [FromQuery] PageParameters pageParameters)
@@ -26,7 +26,7 @@ namespace BackendTest.Api.V1.Controllers.Viewers
         }
 
         [HttpGet("upcoming")]
-        [SwaggerOperation(Summary = "Gets Upcoming Movies", Tags = new[] { "Viewers" })]
+        [SwaggerOperation(Summary = "Gets Upcoming MoviesFromExternalApi", Tags = new[] { "Viewers" })]
         [ProducesResponseType(typeof(PagedList<MovieRecomendationResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUpcoming([FromQuery, BindRequired] int periodOfTimeInDays, [FromQuery] List<string> keywords, [FromQuery] List<string> genres, [FromQuery] PageParameters pageParameters)

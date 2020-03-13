@@ -17,7 +17,7 @@ namespace BackendTest.Api.V1.Controllers.Managers
     public class ManagersDocumentariesController : ControllerBase
     {
         [HttpGet("upcoming")]
-        [SwaggerOperation(Summary = "Gets Upcoming Movies", Tags = new[] { "Managers" })]
+        [SwaggerOperation(Summary = "Gets Upcoming MoviesFromExternalApi", Tags = new[] { "Managers" })]
         [ProducesResponseType(typeof(PagedList<MovieRecomendationResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllTime([FromQuery, BindRequired] int periodOfTimeInDays, [FromQuery, BindRequired] string ageRate, [FromQuery] List<string> genres, [FromQuery] PageParameters pageParameters)

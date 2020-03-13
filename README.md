@@ -35,9 +35,11 @@ Se resuelve el problema del versionado mediante _namespace_ (por directorio), pu
 
 * Se ha implementado la solución usando _TDD_ para _Entidades_, _ValueObjects_, _Servicios_, _Handlers_, algoritmo de cálculo de _Billboards_...
 
+* Los _commits_ permiten seguir la implementación de la solución en sus distintas fases. Se ha utilizado _Semantic Commit Messages_ para formalizar la literatura de los comentarios.
+
 * Se han aplicado los principios _SOLID_, _YAGNI_, _KISS_ y _DRY_, además de respetar las _Transformation Priority Premises_, las _4 Rules of Simple Design_ y, en general, generando código de la forma más _Clean_ posible.
 
-* Se ha utilizado el patrón _Mediator_ (implementado por el nuget _MediatR_) para desacoplar los controladores de sus dependencias. Sólo dependen de _MediatR_, que es quien se encarga de hacer llegar una _request_ al _handler_ correspondiente, y devolver la _response_ si procede. De este modo, las inyecciones de dependencias no sobrecargan los controladores, y se puede extender la aplicación muy fácilmente creando _handlers_ nuevos, evitando modificar código de forma colateral (respetando el principio _Open/Close_ de _SOLID_). Además, _MediatR_ provee de _PipeLines_ para configurar _logging_ y las validaciones de las _requests_.
+* Se ha utilizado el patrón _Mediator_ (implementado por el nuget _MediatR_) para desacoplar los controladores de sus dependencias. Sólo dependen de _MediatR_, que es quien se encarga de hacer llegar una _request_ al _handler_ correspondiente, y devolver la _response_ si procede. De este modo, las inyecciones de dependencias no sobrecargan los controladores, y se puede extender la aplicación muy fácilmente creando _handlers_ nuevos, evitando modificar código de forma colateral (respetando el principio _Open/Close_ de _SOLID_). Además, _MediatR_ provee de _PipeLines_ para configurar _logging_ y las validaciones de las _requests_. Con _MediatR_ también resulta muy sencillo enfocar el código a _CQS_ (_Command Query Segregation_).
 
 * Se usa el patrón _Repository_ para no depender directamente de la infrastructura de datos.
 
@@ -58,3 +60,17 @@ Se resuelve el problema del versionado mediante _namespace_ (por directorio), pu
 * Se usa el paquete _RestSharp_ para conectar con la _API_ externa de _themoviedb.org_.
 
 * En el apartado de _testing_ se utiliza el framework _xUnit_ junto con _FluentAssertions_, _NSubstitute_ para _mocking_ y _AutoFixture_ para generar datos de test.
+
+### Consideraciones finales y mejoras
+
+* Actualmente tanto la _ConnectionString_ como la _API Key_ para las conexiones a datos se almacenan en plano en el fichero _appconfig.json_. En este caso no sucede nada (excesivamente) grave debido a la naturaleza de dicho acceso a datos, pero en caso de querer implementar una mejora en este punto, se hubiese usado la gestion de secretos de _dotnet_.
+
+* La paginación implementada resuelve la cantidad de datos que se le pasa al cliente, pero no la cantidad de datos que se leen de los orígenes de datos. Esto es así por la naturaleza del algoritmo creado. Aun así, para el caso de la base de datos, y teniendo separado las lecturas de las escrituras (_CQS/CQRS_), se podria optar por el uso de un _Micro ORM_ como _Dapper_ para que las operaciones de lectura fuesen mucho más óptimas, si el volumen de carga de datos fuese elevado.
+
+* Se podria haber usado el paquete _Polly_ para establecer las políticas de _Retry_ y _Circuit Breaker_ de accesos externos (base de datos y _API themoviedb.org_).
+
+* Se deberian haber implementado tests de integración que testeasen la _API_ "en vivo". Esto es posible mediante una _Factory_ que cree una _API_ con un contexto _EF InMemory_ hidratado por código, lo que permite la ejecución de tests "reales" sin necesidad de infrastructura. Si vamos algo más lejos, se deberian haber implementado _Smoke Tests_, _Monkey Tests_, etc...
+
+* Se podria haber implementado un _Health Check_ para poder saber fácilmente si el servicio se encuentra disponible.
+
+* Se publica la _API_ en __Azure__ sin usar _docker_.

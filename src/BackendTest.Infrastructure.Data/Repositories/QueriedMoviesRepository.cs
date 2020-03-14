@@ -26,7 +26,7 @@ namespace BackendTest.Infrastructure.Data.Repositories
             _context = context;
             _configuration = configuration;
         }
-        public async Task<Option<ReadOnlyCollection<QueriedMovie>>> GetAllMovies()
+        public async Task<Option<ReadOnlyCollection<QueriedMovie>>> GetAllMoviesFromCity()
         {
             var movies = await MoviesFromDb();
             return new ReadOnlyCollection<QueriedMovie>(movies.ToList()).SomeNotNull();
@@ -63,7 +63,7 @@ namespace BackendTest.Infrastructure.Data.Repositories
                 ));
         }
 
-        public async Task<Option<ReadOnlyCollection<QueriedMovie>>> GetAllMoviesFromCity()
+        public async Task<Option<ReadOnlyCollection<QueriedMovie>>> GetAllMovies()
         {
             var client = new RestClient("https://api.themoviedb.org");
             var request = new RestRequest("3/discover/movie");
